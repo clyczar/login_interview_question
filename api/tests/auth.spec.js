@@ -8,8 +8,23 @@ chai.should();
 
 describe("Login Tests", () => {
 
+  // register user
+  describe("POST /api/auth/register", () => {
+    it("register user", (done) => {
+      chai.request(app).post("/api/auth/register").send({
+        username: "test",
+        password: "123456",
+      }).end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property("message");
+        res.body.should.have.property("message").eq("User has been created.");
+        done();
+    });
+    });
+  });
+
   //reset user before test
-  describe("POST /api/auth/login", () => {
+  describe("POST /api/auth/reset", () => {
     it("login reset before test", (done) => {
       chai.request(app).post("/api/auth/reset").send({
         username: "test",
@@ -24,6 +39,7 @@ describe("Login Tests", () => {
     });
   });
 
+  //user login successful
   describe("POST /api/auth/login", () => {
     it("success login", (done) => {
       chai.request(app).post("/api/auth/login").send({
@@ -38,6 +54,7 @@ describe("Login Tests", () => {
     });
   });
 
+  //user login unsuccessful
   describe("POST /api/auth/login", () => {
     it("incorrect password", (done) => {
       chai.request(app).post("/api/auth/login").send({
@@ -52,6 +69,7 @@ describe("Login Tests", () => {
     });
   });
 
+  //user login unsuccessful 3 times within 5 mins, lock user
   describe("POST /api/auth/login", () => {
     it("3 times login fail then lock user", (done) => {
       let failedAttempts = 0;
