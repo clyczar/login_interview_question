@@ -9,8 +9,9 @@ dotenv.config()
 const connect = async ()=>{
   try {
     await mongoose.connect(process.env.MONGOURL);
-    console.log("connected to mongoDB");
+    console.log('connect to local mongodb');
   }catch (error){
+    console.log(error);
     throw error;
   }
 };
@@ -23,5 +24,7 @@ app.use("/api/auth", authRoute)
 
 app.listen(8888,()=>{
   connect()
-  console.log("connected to api")
+  console.log('app run success');
 })
+
+export default app
